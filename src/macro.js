@@ -35,10 +35,34 @@ function provideInterop({state, babel, referencePath}) {
       ? sourcePath
       : path.join(path.dirname(filename), sourcePath)
 
-  if (isServerBuild) {
-    const serverTemplate = babel.template.smart(`() => require("PATH");`)
-    referencePath.parentPath.replaceWith(serverTemplate({PATH: source}))
+  if (typeof isServerBuild === 'boolean') {
+    if (isServerBuild) {
+      const serverTemplate = babel.template.smart(`() => require("PATH");`)
+      referencePath.parentPath.replaceWith(serverTemplate({PATH: source}))
+    } else {
+      const chunkName = chunkNameCache.get(source)
+      // duplicate imports are not allowed
+      // creates a function that returns the import promise
+      // SEE: https://babeljs.io/docs/en/babel-types#callexpression
+      const promise = t.arrowFunctionExpression(
+        [],
+        t.callExpression(t.identifier('import'), [t.stringLiteral(source)])
+      )
+      promise.body.arguments[0].leadingComments = [
+        {
+          type: 'CommentBlock',
+          value: ` webpackChunkName: "${chunkName}" `,
+        },
+      ]
+      // this adds webpack magic comment for chunks names
+      //     .get('body') is the import() call expression
+      //     .get('arguments')[0] is the first argument of the import(), which is the source
+      referencePath.parentPath.replaceWith(promise)
+    }
   } else {
+    const template = babel.template.smart(
+      `BOOLEAN ? () => require("PATH") : IMPORT;`
+    )
     const chunkName = chunkNameCache.get(source)
     // duplicate imports are not allowed
     // creates a function that returns the import promise
@@ -47,14 +71,16 @@ function provideInterop({state, babel, referencePath}) {
       [],
       t.callExpression(t.identifier('import'), [t.stringLiteral(source)])
     )
-    // this adds webpack magic comment for chunks names
-    //     .get('body') is the import() call expression
-    //     .get('arguments')[0] is the first argument of the import(), which is the source
-    referencePath.parentPath.replaceWith(promise)
-    referencePath.parentPath
-      .get('body')
-      .get('arguments')[0]
-      .addComment('leading', ` webpackChunkName: "${chunkName}" `)
+    promise.body.arguments[0].leadingComments = [
+      {
+        type: 'CommentBlock',
+        value: ` webpackChunkName: "${chunkName}" `,
+      },
+    ]
+
+    referencePath.parentPath.replaceWith(
+      template({PATH: source, BOOLEAN: args[1].node, IMPORT: promise})
+    )
   }
 }
 

@@ -58,11 +58,9 @@ export const Home = codeSplit('./Home', __SERVER__)
 //                               ⬇ BECOMES ⬇                                //
 ///////////////////////////////////////////////////////////////////////////////
 
-// SERVER build
-export const Home = () => require('./Home')
-// CLIENT build
-export const Home = () =>
-  import(/* webpackChunkName: "src/pages/Home" */ './Home')
+export const Home = __SERVER__
+  ? () => require('./Home')
+  : () => import(/* webpackChunkName: "src/pages/Home" */ './Home')
 ```
 
 ## API

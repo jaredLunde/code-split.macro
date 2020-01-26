@@ -19,5 +19,9 @@ pluginTester({
       const Home = codeSplit('./macro', false)
       const OtherHome = codeSplit('./macro', false)
     `,
+    `
+      import codeSplit from './macro'
+      const Home = codeSplit('./macro', __SERVER__)
+    `,
   ],
 })

@@ -50,3 +50,21 @@ const OtherHome = () =>
 
 
 `;
+
+exports[`macros 4. macros: 4. macros 1`] = `
+
+import codeSplit from './macro'
+const Home = codeSplit('./macro', __SERVER__)
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const Home = __SERVER__
+  ? () => require('/Users/jaredlunde/oss/code-split.macro/src/macro')
+  : () =>
+      import(
+        /* webpackChunkName: "code-split.macro/src/macro" */
+        '/Users/jaredlunde/oss/code-split.macro/src/macro'
+      )
+
+
+`;
