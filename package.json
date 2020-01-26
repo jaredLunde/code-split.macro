@@ -1,6 +1,6 @@
 {
   "name": "code-split.macro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/jaredLunde/code-split.macro#readme",
   "repository": "github:jaredLunde/code-split.macro",
   "bugs": "https://github.com/jaredLunde/code-split.macro/issues",
@@ -19,12 +19,13 @@
   "module": "dist/es/macro.js",
   "types": "types/macro.d.ts",
   "files": [
-    "/dist"
+    "/dist",
+    "/types"
   ],
   "sideEffects": false,
   "scripts": {
     "build": "npm run build:cjs && npm run build:es",
-    "build:cjs": "babel src -d dist/cjs -x .js --ignore \"**/*.test.ts\",\"**/test.js\" --delete-dir-on-start",
+    "build:cjs": "babel src -d dist/cjs -x .js --ignore \"**/*.test.js\",\"**/test.js\" --delete-dir-on-start",
     "build:es": "babel src -d dist/es -x .js --env-name es --ignore \"**/*.test.js\",\"**/test.js\" --delete-dir-on-start",
     "format": "prettier --write \"**/*.{ts,js,md,yml,json,babelrc,eslintrc,prettierrc}\"",
     "lint": "eslint . --ext .js",
