@@ -1,6 +1,9 @@
 declare module 'code-split.macro' {
-  function codeSplit(path: string, isServerBuild: false): Promise<any>
-  function codeSplit(path: string, isServerBuild: true): any
-  function codeSplit(path: string, isServerBuild: boolean): Promise<any> | any
+  function codeSplit<T = any>(path: string, isServerBuild: false): Promise<T>
+  function codeSplit<T = any>(path: string, isServerBuild: true): T
+  function codeSplit<T = any>(
+    path: string,
+    isServerBuild: boolean
+  ): Promise<T> | T
   export default codeSplit
 }
