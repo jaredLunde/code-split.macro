@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`macros 1. macros: 1. macros 1`] = `
+
+import codeSplit from './macro'
+const Home = codeSplit('./macro', true)
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const Home = () => require('/Users/jaredlunde/oss/code-split.macro/src/macro')
+
+
+`;
+
+exports[`macros 2. macros: 2. macros 1`] = `
+
+import codeSplit from './macro'
+const Home = codeSplit('./macro', false)
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const Home = () =>
+  import(
+    /* webpackChunkName: "code-split.macro/src/macro" */
+    '/Users/jaredlunde/oss/code-split.macro/src/macro'
+  )
+
+
+`;
+
+exports[`macros 3. macros: 3. macros 1`] = `
+
+import codeSplit from './macro'
+const Home = codeSplit('./macro', false)
+const OtherHome = codeSplit('./macro', false)
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const Home = () =>
+  import(
+    /* webpackChunkName: "code-split.macro/src/macro" */
+    '/Users/jaredlunde/oss/code-split.macro/src/macro'
+  )
+
+const OtherHome = () =>
+  import(
+    /* webpackChunkName: "code-split.macro/src/macro" */
+    '/Users/jaredlunde/oss/code-split.macro/src/macro'
+  )
+
+
+`;

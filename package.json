@@ -7,29 +7,34 @@
   "license": "MIT",
   "description": "A macro for assisting in client/server interop for code splitting so server side imports are not asynchronous",
   "keywords": [
-    "code split.macro"
+    "code splitting",
+    "code splitting macro",
+    "code split",
+    "code split macro",
+    "babel macro",
+    "babel code split",
+    "babel code splitting"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/es/index.js",
+  "main": "dist/cjs/macro.js",
+  "module": "dist/es/macro.js",
+  "types": "types/macro.d.ts",
   "files": [
     "/dist"
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "npm run build:cjs && npm run build:es && npm run build:types",
-    "build:cjs": "babel src -d dist/cjs -x .ts --ignore \"**/*.test.ts\",\"**/test.ts\" --delete-dir-on-start",
-    "build:es": "babel src -d dist/es -x .ts --env-name es --ignore \"**/*.test.ts\",\"**/test.ts\" --delete-dir-on-start",
-    "build:types": "tsc -p tsconfig.json -d --outDir dist/es --emitDeclarationOnly && mkdir -p dist/cjs && cp -R dist/es/**.d.ts dist/cjs && rimraf dist/**/*.test.d.ts",
-    "check-types": "tsc --noEmit -p tsconfig.json",
+    "build": "npm run build:cjs && npm run build:es",
+    "build:cjs": "babel src -d dist/cjs -x .js --ignore \"**/*.test.ts\",\"**/test.js\" --delete-dir-on-start",
+    "build:es": "babel src -d dist/es -x .js --env-name es --ignore \"**/*.test.js\",\"**/test.js\" --delete-dir-on-start",
     "format": "prettier --write \"**/*.{ts,js,md,yml,json,babelrc,eslintrc,prettierrc}\"",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --ext .js",
     "prepublishOnly": "npm run lint && npm run test && npm run build && npm run format",
     "test": "jest",
-    "validate": "npm run check-types && npm run lint && npm run test -- --coverage"
+    "validate": "npm run lint && npm run test -- --coverage"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run build:types"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
@@ -43,9 +48,13 @@
   },
   "devDependencies": {
     "@lunde/babel-preset-es": "latest",
+    "@types/babel-plugin-macros": "^2.8.0",
     "@types/jest": "latest",
+    "@types/node": "^13.5.0",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "babel-plugin-macros": "^2.8.0",
+    "babel-plugin-tester": "^8.0.1",
     "cross-env": "latest",
     "eslint": "latest",
     "eslint-import-resolver-jest": "latest",
@@ -53,11 +62,13 @@
     "husky": "latest",
     "jest": "latest",
     "lint-staged": "latest",
-    "prettier": "latest",
+    "prettier": "^1.19.1",
     "rimraf": "^2.6.3",
     "ts-jest": "latest",
     "typescript": "latest"
   },
   "dependencies": {},
-  "peerDependencies": {}
+  "peerDependencies": {
+    "babel-plugin-macros": ">=2.8.0"
+  }
 }
